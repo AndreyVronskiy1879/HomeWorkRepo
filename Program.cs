@@ -88,7 +88,7 @@ namespace ReserchigOfDays
                 offset = offset == 0 ? 7 : offset;
 
                 Console.WriteLine("Date of the next {0}: {1}\n\n", day, DateTime.Today.AddDays(offset).ToShortDateString());
-                Console.ResetColor();
+                Console.ResetColor();   
             }
     }
     
