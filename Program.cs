@@ -11,7 +11,7 @@ namespace ReserchigOfDays
 
             while (true)
             {
-                Console.WriteLine("Enter the day of the week . To exit, type \"q\":");
+                Console.WriteLine("Enter the day of the week . To exit, type \"q\":");\\
 
                 var enterDay = Console.ReadLine();
 
