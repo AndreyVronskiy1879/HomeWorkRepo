@@ -13,8 +13,12 @@ namespace StringHW4
 //Number of characters copied : 31 
         static void Main(string[] args)
         {
-            
-            
+            string str = "This is a string to be copied.";
+            Console.WriteLine($"The First string is :{str}");
+            string str2 = string.Copy(str);
+            Console.WriteLine($"The Second string is : {str2}");
+            Console.WriteLine($"Number of characters copied: {str2.Length}");
+
         }
     }
 }
