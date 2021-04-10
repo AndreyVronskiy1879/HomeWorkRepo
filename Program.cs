@@ -12,7 +12,8 @@ namespace StringHW1
 //Length of the string is : 15 
         static void Main(string[] args)
         {
-            
+            string a = " w3resource.com";
+            Console.WriteLine($"Length string a: {a.Length}" );
         }
     }
 }
