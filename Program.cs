@@ -13,7 +13,10 @@ namespace StringHW2
 //w  3  r e  s o  u r  c e.c  o m
         static void Main(string[] args)
         {
-           
+            string str = "w3resource.com";
+            char[] cArray = str.ToCharArray();
+            string result = String.Join("  ", cArray);
+            Console.WriteLine(result);
         }
     }
 }
