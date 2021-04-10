@@ -18,7 +18,12 @@ namespace ArraysHW5
 //2 4 5 7 9
         static void Main(string[] args)
         {
-           
+            int[] nums = new int[5] { 2, 7, 4, 5, 9 };
+            Array.Sort(nums);
+            foreach (int i in nums)
+            {
+                Console.WriteLine(i);
+            }
         }
     }
 }
