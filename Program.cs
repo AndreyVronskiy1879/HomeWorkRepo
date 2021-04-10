@@ -18,7 +18,14 @@ namespace ArraysHW4
 //15 10 12
         static void Main(string[] args)
         {
-           
+            int[] arr1 = new int[] { 15, 10, 12, 6, 8, 7 };
+            int[] arr2 = new int[3];
+
+            Array.Copy(arr1, 0, arr2, 0, 3);
+            foreach (int numbers in arr2)
+            {
+                Console.Write($"{numbers}\t");
+            }
         }
     }
 }
