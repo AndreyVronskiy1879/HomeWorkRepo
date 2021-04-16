@@ -38,10 +38,29 @@ namespace WeeklyTask
             this._time = time;
             this._priority = priority;
         }
-
-        public string ConvertToString()
+        public DateTime GetDate()
         {
-            return $"{_name}-{_date}-{_time}-{_priority}";
+            return _date;
+        }
+        public string ConvertToString(int index)
+        {
+            var output = $"Task № {index + 1}: {_name} ";
+            if (_date != default(DateTime))
+            {
+                output += $"{ _date.ToShortDateString()}";
+            }
+
+            if (_time != default(DateTime))
+            {
+                output += $"{_time.ToShortTimeString()}";
+            }
+
+            if (_priority != Priority.Empty)
+            {
+                output += _priority.ToString();
+            }
+
+            return output;
         }
     }
 }

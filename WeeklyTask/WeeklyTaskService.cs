@@ -19,40 +19,9 @@ namespace WeeklyTask
 
             Console.WriteLine("Add task in format {}-{}-{}-{}");
             var inputData = Console.ReadLine();
-            var parts = inputData?.Split(",");
-
-            if (parts == null || parts.Length < 1 || parts.Length > 4)
-            {
-                Console.WriteLine("Invalid format. Try again");
-                return;
-            }
-
-            HandleAddNewTask(parts);
+            var task =ParseNewTask(inputData);
+            AddNewTask(task);
         }
-
-        private void HandleAddNewTask(string[] parts)
-        {
-            if (parts.Length == 1)
-            {
-                AddNewTaskWithName(parts);
-            }
-
-            if (parts.Length == 2)
-            {
-                AddNewTaskWithDate(parts);
-            }
-
-            if (parts.Length == 3)
-            {
-                AddNewTaskWithDateTime(parts);
-            }
-
-            if (parts.Length == 4)
-            {
-                AddNewTaskWithDateTimeAndPriority(parts);
-            }
-        }
-
         public void HandleFilterByPriority()
         {
             Console.WriteLine("HandleFilterByPriority");
@@ -60,49 +29,107 @@ namespace WeeklyTask
 
         public void HandleFilterByDate()
         {
-            Console.WriteLine("HandleFilterByDate");
+            Console.WriteLine("Input date:");
+            var inputDate = Console.ReadLine();
+            var date = DateTime.Parse(inputDate);
+           
+            for(int i=0;i<_counter; i++)
+            {
+                var task = _tasks[i];
+                if (_tasks[i].GetDate() >= date)
+                {
+                    PrintTask(i, task);
+                }
+            }
+        }
+
+        private static void PrintTask(int i, WeeklyTask task)
+        {
+            Console.WriteLine(task.ConvertToString(i));
         }
 
         public void HandleEdit()
         {
-            Console.WriteLine("HandleEdit");
+            Console.WriteLine("Input number to edit:");
+            var inputNumber = Console.ReadLine();
+            var taskNumber = int.Parse(inputNumber);
+            
+            Console.WriteLine("Input new task data.");
+            var inputTaskData = Console.ReadLine();
+            WeeklyTask task=ParseNewTask(inputTaskData);
+            _tasks[taskNumber - 1] = task;
+           
         }
         public void HandleList()
         {
-            for(int i = 0; i < _counter; i++)
+            for (int i = 0; i < _counter; i++)
             {
                 var task = _tasks[i];
-                Console.WriteLine(task.ConvertToString());
+                Console.WriteLine(task.ConvertToString(i));
             }
         }
-        private  void AddNewTaskWithName(string[] parts)
-        {
-            var task = new WeeklyTask(parts[0]);
-            AddNewTask(task);
-        }
-        private  void AddNewTaskWithDate(string[] parts)
-        {
-            var date = DateTime.Parse(parts[1]);
-            var task = new WeeklyTask(parts[0], date);
-            AddNewTask(task);
-        }
-        private  void AddNewTaskWithDateTime(string[] parts)
-        {
-            var time = DateTime.Parse(parts[2]);
-            var date = DateTime.Parse(parts[1]);
-            var task = new WeeklyTask(parts[0], date, time);
-            AddNewTask(task);
-        }
-        private  void AddNewTaskWithDateTimeAndPriority(string[] parts)
-        {
-            var time = DateTime.Parse(parts[2]);
-            var date = DateTime.Parse(parts[1]);
 
-            if (Enum.TryParse<Priority>(parts[3], out var priority))
+        private WeeklyTask ParseNewTask(string inputData)
+        {
+            var parts = inputData?.Split(",");
+
+            if (parts == null || parts.Length < 1 || parts.Length > 4)
             {
-                var task = new WeeklyTask(parts[0], date, time, priority);
-                AddNewTask(task);
+                Console.WriteLine("Invalid format. Try again");
+                return null;
             }
+
+            return CreateNewTask(parts);
+        }
+
+        private WeeklyTask CreateNewTask(string[] parts)
+        {
+            switch (parts.Length)
+            {
+                case 1:
+                    return CreateTaskWithName(parts);                   
+                case 2:
+                    return CreateTaskWithNameandDate(parts);                    
+                case 3:
+                    return CreateTaskWithNameDateTime(parts);                  
+                case 4:
+                    return CreateTaskWithNameDAteTimePriority(parts);
+                default:
+                    return null;
+            }
+        }
+
+
+        private  WeeklyTask CreateTaskWithName(string[] parts)
+        {
+            
+            return new WeeklyTask(parts[0]);
+            
+        }
+        private WeeklyTask CreateTaskWithNameandDate(string[] parts)
+        {
+            var date = DateTime.Parse(parts[1]);
+            return new WeeklyTask(parts[0], date);
+            
+        }
+        private WeeklyTask CreateTaskWithNameDateTime(string[] parts)
+        {
+            
+            var (date,time)= ParseDateTime(parts);
+            return new WeeklyTask(parts[0], date, time);
+            
+        }
+        private WeeklyTask CreateTaskWithNameDAteTimePriority(string[] parts)
+        {
+            var (date, time) = ParseDateTime(parts);
+            var priority = Enum.Parse<Priority>(parts[3]);
+                return new WeeklyTask(parts[0], date, time, priority);
+        }
+        private static (DateTime date, DateTime time) ParseDateTime(string[] parts)
+        {
+            var time = DateTime.Parse(parts[2]);
+            var date = DateTime.Parse(parts[1]);
+            return (date, time);
         }
         private  void AddNewTask(WeeklyTask task)
         {
