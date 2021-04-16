@@ -38,5 +38,10 @@ namespace WeeklyTask
             this._time = time;
             this._priority = priority;
         }
+
+        public string ConvertToString()
+        {
+            return $"{_name}-{_date}-{_time}-{_priority}";
+        }
     }
 }
