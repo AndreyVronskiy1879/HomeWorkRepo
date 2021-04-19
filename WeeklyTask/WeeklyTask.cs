@@ -8,10 +8,10 @@ namespace WeeklyTask
 {
      internal class WeeklyTask
     {
-        private readonly string _name;
-        private readonly DateTime _date;
-        private readonly DateTime _time;
-        private readonly Priority _priority;
+        public readonly string _name;
+        public readonly DateTime _date;
+        public readonly DateTime _time;
+     
 
         public WeeklyTask(string name)
         {
@@ -30,19 +30,11 @@ namespace WeeklyTask
             this._date = date;
             this._time = time;
         }
-
-        public WeeklyTask(string name, DateTime date, DateTime time, Priority priority)
-        {
-            this._name = name;
-            this._date = date;
-            this._time = time;
-            this._priority = priority;
-        }
         public DateTime GetDate()
         {
             return _date;
         }
-        public string ConvertToString(int index)
+        public virtual string  ConvertToString(int index)
         {
             var output = $"Task № {index + 1}: {_name} ";
             if (_date != default(DateTime))
@@ -54,12 +46,6 @@ namespace WeeklyTask
             {
                 output += $"{_time.ToShortTimeString()}";
             }
-
-            if (_priority != Priority.Empty)
-            {
-                output += _priority.ToString();
-            }
-
             return output;
         }
     }
