@@ -65,7 +65,7 @@ namespace WeeklyTask
             for (int i = 0; i < _counter; i++)
             {
                 var task = _tasks[i];
-                Console.WriteLine(task.ConvertToString(i));
+                PrintTask(i, task);
             }
         }
 
@@ -123,7 +123,7 @@ namespace WeeklyTask
         {
             var (date, time) = ParseDateTime(parts);
             var priority = Enum.Parse<Priority>(parts[3]);
-                return new WeeklyTask(parts[0], date, time, priority);
+                return new PriorityTask(parts[0], date, time, priority);
         }
         private static (DateTime date, DateTime time) ParseDateTime(string[] parts)
         {
