@@ -6,34 +6,37 @@ using System.Threading.Tasks;
 
 namespace WeeklyTask
 {
-    internal class PriorityTask : WeeklyTask
+    internal class PriorityTask : RegularTask
     {
-        public Priority _priority;
-        public PriorityTask(string name, DateTime date, DateTime time, Priority priority) : base(name, date, time)
+        private readonly Priority priority;
+
+        public PriorityTask(string name, DateTime date, TimeSpan time, Priority priority) : base(name, date, time)
         {
-            _priority = priority;
+            this.priority = priority;
         }
-        public override string ConvertToString(int index) 
+
+        public Priority GetPriority()
         {
-            var output = $"Task № {index + 1}: {_name} ";
-            if (_date != default(DateTime))
-            {
-                output += $"{ _date.ToShortDateString()}";
-            }
+            return priority;
+        }
 
-            if (_time != default(DateTime))
-            {
-                output += $"{_time.ToShortTimeString()}";
-            }
+        public override string ConvertToString(int index)
+        {
+            var output = base.ConvertToString(index);
 
-            if (_priority != Priority.Empty)
+            if (priority != Priority.Empty)
             {
-                output += _priority.ToString();
+                output += $"{priority}";
             }
 
             return output;
         }
+
+        public override string GetAlarm()
+        {
+            return base.GetAlarm();
+        }
+
     }
 
-   
 }
