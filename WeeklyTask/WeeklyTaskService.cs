@@ -7,32 +7,54 @@ using System.Threading.Tasks;
 namespace WeeklyTask
 {
     delegate void GetMessage(string message);
+    delegate void WriteOutput(string text);
+    delegate string ReadInput();
+    
     internal class WeeklyTaskService
     {
         GetMessage _mes= GetMessageAboutUpdateTask;
+        WriteOutput _writeOutput;
+        ReadInput _readInput=()=>Console.ReadLine();
         private  int _counter;
         private readonly WeeklyTask[] _tasks = new WeeklyTask[10];
+        public void RegisterExchanger(WriteOutput writeOutput)
+        {
+            _writeOutput = writeOutput;
+        }
         public void HandleAddNewTask()
         {
             if (_counter > 10)
             {
-                Console.WriteLine("Out of memory. Try again");
+                if (_writeOutput != null)
+                {
+                    _writeOutput("Out of memory. Try again");
+                } 
             }
-
-            Console.WriteLine("Add task in format {}-{}-{}-{}");
-            var inputData = Console.ReadLine();
+            if (_writeOutput != null)
+            {
+                _writeOutput("Add task in format {}-{}-{}-{}");
+            }
+            
+            var inputData = _readInput();
             var task =ParseNewTask(inputData);
             AddNewTask(task);
         }
         public void HandleFilterByPriority()
         {
-            Console.WriteLine("HandleFilterByPriority");
+            if (_writeOutput != null)
+            {
+                _writeOutput("HandleFilterByPriority");
+            }
         }
 
         public void HandleFilterByDate()
         {
-            Console.WriteLine("Input date:");
-            var inputDate = Console.ReadLine();
+            if (_writeOutput != null)
+            {
+                _writeOutput("Input date:");
+            }
+
+            var inputDate = _readInput();
             var date = DateTime.Parse(inputDate);
            
             for(int i=0;i<_counter; i++)
@@ -53,11 +75,11 @@ namespace WeeklyTask
         public void HandleEdit()
         {
             Console.WriteLine("Input number to edit:");
-            var inputNumber = Console.ReadLine();
+            var inputNumber = _readInput();
             var taskNumber = int.Parse(inputNumber);
 
             Console.WriteLine("Input new task data.");
-            var inputTaskData = Console.ReadLine();
+            var inputTaskData = _readInput();
             _mes(inputNumber);
             WeeklyTask task = ParseNewTask(inputTaskData);
             _tasks[taskNumber - 1] = task;
