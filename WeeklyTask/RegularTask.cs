@@ -26,10 +26,11 @@ namespace WeeklyTask
             this.time = time;
         }
 
-        public DateTime GetDate()
+        public RegularTask(string name, DateTime date, DateTime time1) : this(name, date)
         {
-            return date;
         }
+
+        public DateTime Date => date;
 
         public override string ConvertToString(int index)
         {
