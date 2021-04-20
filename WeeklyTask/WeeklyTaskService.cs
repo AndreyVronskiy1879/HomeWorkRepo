@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace WeeklyTask
 {
+    delegate void GetMessage(string message);
     internal class WeeklyTaskService
     {
+        GetMessage _mes= GetMessageAboutUpdateTask;
         private  int _counter;
         private readonly WeeklyTask[] _tasks = new WeeklyTask[10];
         public void HandleAddNewTask()
@@ -53,13 +55,19 @@ namespace WeeklyTask
             Console.WriteLine("Input number to edit:");
             var inputNumber = Console.ReadLine();
             var taskNumber = int.Parse(inputNumber);
-            
+
             Console.WriteLine("Input new task data.");
             var inputTaskData = Console.ReadLine();
-            WeeklyTask task=ParseNewTask(inputTaskData);
+            _mes(inputNumber);
+            WeeklyTask task = ParseNewTask(inputTaskData);
             _tasks[taskNumber - 1] = task;
-           
         }
+
+        private static void GetMessageAboutUpdateTask(string inputNumber)
+        {
+            Console.WriteLine($"Task # {inputNumber} has been updated");
+        }
+
         public void HandleList()
         {
             for (int i = 0; i < _counter; i++)
@@ -103,20 +111,20 @@ namespace WeeklyTask
         private  WeeklyTask CreateTaskWithName(string[] parts)
         {
             
-            return new WeeklyTask(parts[0]);
+            return new RegularTask(parts[0]);
             
         }
         private WeeklyTask CreateTaskWithNameandDate(string[] parts)
         {
             var date = DateTime.Parse(parts[1]);
-            return new WeeklyTask(parts[0], date);
+            return new RegularTask(parts[0], date);
             
         }
         private WeeklyTask CreateTaskWithNameDateTime(string[] parts)
         {
             
             var (date,time)= ParseDateTime(parts);
-            return new WeeklyTask(parts[0], date, time);
+            return new RegularTask(parts[0], date, time);
             
         }
         private WeeklyTask CreateTaskWithNameDAteTimePriority(string[] parts)

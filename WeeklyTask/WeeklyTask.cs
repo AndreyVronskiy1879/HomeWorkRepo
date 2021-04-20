@@ -21,6 +21,11 @@ namespace WeeklyTask
         }
 
         public abstract string GetAlarm();
+
+        internal DateTime GetDate()
+        {
+            throw new NotImplementedException();
+        }
     }
     
 }

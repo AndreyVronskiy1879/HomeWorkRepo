@@ -15,6 +15,10 @@ namespace WeeklyTask
             this.priority = priority;
         }
 
+        public PriorityTask(string name, DateTime date, DateTime time, Priority priority) : base(name, date)
+        {
+        }
+
         public Priority GetPriority()
         {
             return priority;
