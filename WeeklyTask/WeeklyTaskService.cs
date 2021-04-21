@@ -6,55 +6,44 @@ using System.Threading.Tasks;
 
 namespace WeeklyTask
 {
-    delegate void GetMessage(string message);
     delegate void WriteOutput(string text);
     delegate string ReadInput();
     
     internal class WeeklyTaskService
     {
-        GetMessage _mes= GetMessageAboutUpdateTask;
         WriteOutput _writeOutput;
-        ReadInput _readInput=()=>Console.ReadLine();
+        ReadInput _readInput;
         private  int _counter;
         private readonly WeeklyTask[] _tasks = new WeeklyTask[10];
-        public void RegisterExchanger(WriteOutput writeOutput)
+
+        public void RegisterOutputWriter(WriteOutput writeOutput)
         {
             _writeOutput = writeOutput;
+        }
+        public string SetReader(ReadInput readInput)
+        {
+            _readInput = readInput;
+            return null;
         }
         public void HandleAddNewTask()
         {
             if (_counter > 10)
             {
-                if (_writeOutput != null)
-                {
-                    _writeOutput("Out of memory. Try again");
-                } 
+                    _writeOutput?.Invoke("Out of memory. Try again");
             }
-            if (_writeOutput != null)
-            {
-                _writeOutput("Add task in format {}-{}-{}-{}");
-            }
-            
-            var inputData = _readInput();
+                _writeOutput?.Invoke("Add task in format {}-{}-{}-{}");
+            var inputData = _readInput?.Invoke();
             var task =ParseNewTask(inputData);
             AddNewTask(task);
         }
         public void HandleFilterByPriority()
         {
-            if (_writeOutput != null)
-            {
-                _writeOutput("HandleFilterByPriority");
-            }
+                _writeOutput?.Invoke("HandleFilterByPriority");
         }
-
         public void HandleFilterByDate()
         {
-            if (_writeOutput != null)
-            {
-                _writeOutput("Input date:");
-            }
-
-            var inputDate = _readInput();
+            _writeOutput?.Invoke("Input date:");
+            var inputDate = _readInput?.Invoke();
             var date = DateTime.Parse(inputDate);
            
             for(int i=0;i<_counter; i++)
@@ -66,30 +55,17 @@ namespace WeeklyTask
                 }
             }
         }
-
-        private static void PrintTask(int i, WeeklyTask task)
-        {
-            Console.WriteLine(task.ConvertToString(i));
-        }
-
         public void HandleEdit()
         {
-            Console.WriteLine("Input number to edit:");
+            _writeOutput?.Invoke("Input number to edit:");
             var inputNumber = _readInput();
             var taskNumber = int.Parse(inputNumber);
-
-            Console.WriteLine("Input new task data.");
-            var inputTaskData = _readInput();
-            _mes(inputNumber);
+            _writeOutput?.Invoke("Input new task data.");
+            var inputTaskData = _readInput?.Invoke();
+            _writeOutput?.Invoke($"Task # {inputNumber} has been updated");
             WeeklyTask task = ParseNewTask(inputTaskData);
             _tasks[taskNumber - 1] = task;
         }
-
-        private static void GetMessageAboutUpdateTask(string inputNumber)
-        {
-            Console.WriteLine($"Task # {inputNumber} has been updated");
-        }
-
         public void HandleList()
         {
             for (int i = 0; i < _counter; i++)
@@ -99,19 +75,22 @@ namespace WeeklyTask
             }
         }
 
+        private  void PrintTask(int i, WeeklyTask task)
+        {
+            _writeOutput?.Invoke(task.ConvertToString(i));
+        }
         private WeeklyTask ParseNewTask(string inputData)
         {
             var parts = inputData?.Split(",");
 
             if (parts == null || parts.Length < 1 || parts.Length > 4)
             {
-                Console.WriteLine("Invalid format. Try again");
+                _writeOutput?.Invoke("Invalid format. Try again");
                 return null;
             }
 
             return CreateNewTask(parts);
         }
-
         private WeeklyTask CreateNewTask(string[] parts)
         {
             switch (parts.Length)
@@ -128,26 +107,19 @@ namespace WeeklyTask
                     return null;
             }
         }
-
-
         private  WeeklyTask CreateTaskWithName(string[] parts)
         {
-            
             return new RegularTask(parts[0]);
-            
         }
         private WeeklyTask CreateTaskWithNameandDate(string[] parts)
         {
             var date = DateTime.Parse(parts[1]);
-            return new RegularTask(parts[0], date);
-            
+            return new RegularTask(parts[0], date); 
         }
         private WeeklyTask CreateTaskWithNameDateTime(string[] parts)
         {
-            
             var (date,time)= ParseDateTime(parts);
             return new RegularTask(parts[0], date, time);
-            
         }
         private WeeklyTask CreateTaskWithNameDAteTimePriority(string[] parts)
         {
