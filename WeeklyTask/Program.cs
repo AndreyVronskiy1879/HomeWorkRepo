@@ -49,7 +49,7 @@ namespace WeeklyTask
                     s_service.HandleFilterByDate();
                     break;
                 case 5:
-                    s_service.HandleFilterByPriority();
+                    s_service. HandleFilterByPriority();
                     break;
             }
         }

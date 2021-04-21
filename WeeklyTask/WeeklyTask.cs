@@ -6,42 +6,26 @@ using System.Threading.Tasks;
 
 namespace WeeklyTask
 {
-     internal class WeeklyTask
+     internal abstract class WeeklyTask
     {
-        private readonly string _name;
-        private readonly DateTime _date;
-        private readonly DateTime _time;
-        private readonly Priority _priority;
+        private readonly string name;
 
         public WeeklyTask(string name)
         {
-            this._name = name;
+            this.name = name;
         }
 
-        public WeeklyTask(string name,DateTime date)
+        public virtual string ConvertToString(int index)
         {
-            this._name = name;
-            this._date = date;
+            return $"Task #{index + 1}: {name} ";
         }
 
-        public WeeklyTask(string name, DateTime date,DateTime time)
-        {
-            this._name = name;
-            this._date = date;
-            this._time = time;
-        }
+        public abstract string GetAlarm();
 
-        public WeeklyTask(string name, DateTime date, DateTime time, Priority priority)
+        internal DateTime GetDate()
         {
-            this._name = name;
-            this._date = date;
-            this._time = time;
-            this._priority = priority;
-        }
-
-        public string ConvertToString()
-        {
-            return $"{_name}-{_date}-{_time}-{_priority}";
+            throw new NotImplementedException();
         }
     }
+    
 }
